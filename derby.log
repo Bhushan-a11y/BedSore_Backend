@@ -1,0 +1,13 @@
+----------------------------------------------------------------
+Mon Jun 15 16:46:04 IST 2026:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.16.1.1 - (1901046): instance a816c00e-019e-cafe-ea7a-0000026e0068 
+on database directory memory:/home/bhushan/Downloads/BedSore/demo/fd97fd0c-e6d2-4d3f-ae26-91c7669cebca with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@11524711 
+Loaded from file:/home/bhushan/.m2/repository/org/apache/derby/derby/10.16.1.1/derby-10.16.1.1.jar
+java.vendor=Eclipse Adoptium
+java.runtime.version=21.0.10+7-LTS
+user.dir=/home/bhushan/Downloads/BedSore/demo
+os.name=Linux
+os.arch=amd64
+os.version=6.17.9-76061709-generic
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''
