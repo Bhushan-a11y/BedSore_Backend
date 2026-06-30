@@ -37,10 +37,10 @@ public void saveData(BedTelemetryDTO bedTelemetryDTO) {
         return; 
     }
 
-    // 1. Fetch the GUARANTEED safe List instead of the Optional box
+    
     List<PressureLog> logs = pressureLogRepository.findAllByPatientIdOrderByTimestampDesc(patientDetails.getPatientId());
     
-    // 2. Check if the list has items (!isEmpty), and if so, look at index 0 (the newest log)
+  
     if (!logs.isEmpty() && currentPosture != null && currentPosture.equals(logs.get(0).getPosture())) {
         System.out.println("DEBUG: Posture unchanged, ignoring to protect database.");
         return;
@@ -89,7 +89,7 @@ public void saveData(BedTelemetryDTO bedTelemetryDTO) {
             timeElapsed
     );
 }
-@Scheduled(fixedRate = 60000) // Runs every 60 seconds
+@Scheduled(fixedRate = 60000) 
     public void checkPatientPosture() {
         List<PatientDetails> patients = patientDetailsRepository.findAll();
         
@@ -99,9 +99,9 @@ public void saveData(BedTelemetryDTO bedTelemetryDTO) {
             
             long elapsed = dto.getMinutesElapsed();
             
-            // Logic: Every 25 minutes (25, 50, 75...)
+           
             if (elapsed > 0 && elapsed % 25 == 0) {
-                // The Bouncer: check if we already alerted for this specific milestone
+               
                 if (lastAlertedMinute.getOrDefault(p.getPatientId(), -1L) != elapsed) {
                     
                     List<PressureLog> logs = pressureLogRepository.findAllByPatientIdOrderByTimestampDesc(p.getPatientId());
@@ -110,7 +110,7 @@ public void saveData(BedTelemetryDTO bedTelemetryDTO) {
                         String prompt = buildPrompt(p, logs);
                         String recommendation = aiService.generateRecommendation(prompt);
                         
-                        // Update the Bouncer so we don't spam
+                     
                         lastAlertedMinute.put(p.getPatientId(), elapsed);
                         
                         System.out.println("AI ALERT FOR PATIENT " + p.getPatientId() + ": " + recommendation);
@@ -120,21 +120,20 @@ public void saveData(BedTelemetryDTO bedTelemetryDTO) {
         }
     }
 private String buildPrompt(PatientDetails patient, List<PressureLog> logs) {
-    // 1. Start with a persona (Tell the AI who it is)
+    
     String persona = "You are a senior hospital head nurse. ";
 
-    // 2. Give it the Context (The raw data from your database)
+   
     String context = "The patient is " + patient.getPName() + 
                      ", aged " + patient.getAge() + 
                      ", with a skin condition of: " + patient.getSkinCondition() + ". " +
                      "The patient has been in the '" + logs.get(0).getPosture() + 
                      "' position for " + getDuration(patient.getPatientId()) + " minutes.";
 
-    // 3. Give it the Task (What you want it to do)
     String task = "Based on this, tell me in exactly one sentence if this is dangerous " +
                   "and what the nurse should do next.";
 
-    // Combine it all into one giant string
+ 
     return persona + context + task;
 }
 
